@@ -13,5 +13,6 @@ admin.site.site_header = 'Library Management'
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     exclude = ('email',)    #user will not see this email field
-    list_display = ('name','author')    #these fields we can see after clicking on books
+    list_display = ('name','author','category')    #these fields we can see after clicking on books
     list_filter = ('name', )
+    search_fields = ['name']

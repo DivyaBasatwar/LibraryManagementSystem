@@ -1,12 +1,25 @@
-# Create your views here.
+# Create your views here.....
 from django.shortcuts import render, redirect
 from .models import Book
 from .forms import BookCreate
 from django.http import HttpResponse
+import math
+
 #DataFlair
 def index(request):       #read operation of CRUD
-    shelf = Book.objects.all()
-    return render(request, 'book/library.html', {'shelf': shelf})
+    products = Book.objects.all()
+    n = len(products)
+    allProds=[]
+    catprods= Book.objects.values('category', 'id')
+    cats= {item["category"] for item in catprods}
+    for cat in cats:
+        prod=Book.objects.filter(category=cat)
+        n = len(prod)
+        nSlides = math.ceil(n/4)
+        allProds.append([prod, range(1, nSlides), nSlides])
+    params={'allProds':allProds }
+    return render(request, 'book/library.html', params)
+    #return render(request, 'book/library.html', {'shelf': shelf})
 def upload(request):      #Create operation of CRUD
     upload = BookCreate()
     if request.method == 'POST':
